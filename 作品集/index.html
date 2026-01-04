@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视觉传达作品集 | 杨永琦</title>
+    <style>
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            color: #222;
+            line-height: 1.6;
+            background-color: #fafafa;
+            overflow-x: hidden;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+        }
+        
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+        }
+        
+        /* 导航栏样式 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 80px; /* 固定导航栏高度 */
+        }
+        
+        .navbar.scrolled {
+            padding: 15px 50px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.08);
+            height: 70px; /* 滚动后导航栏高度 */
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+        
+        .nav-links a {
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            position: relative;
+            padding: 5px 0;
+            color: #333;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: #667eea;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        /* ========== 修复：主内容区域 ========== */
+        .main-content {
+            margin-top: 80px; /* 与导航栏高度匹配 */
+        }
+        
+        /* ========== 修复：为锚点添加滚动偏移 ========== */
+        #portfolio, #about, #contact {
+            scroll-margin-top: 100px; /* 重要：滚动时留出顶部空间 */
+            padding-top: 0; /* 确保没有额外内边距 */
+        }
+        
+        /* 或者使用锚点伪元素 */
+        .section-anchor {
+            display: block;
+            position: relative;
+            top: -100px; /* 向上偏移，抵消导航栏高度 */
+            visibility: hidden;
+        }
+        
+        /* 英雄横幅区域 */
+        .hero-section {
+            position: relative;
+            height: 100vh;
+            min-height: 700px;
+            background: 
+                linear-gradient(135deg, rgba(25, 25, 40, 0.9) 0%, rgba(40, 40, 60, 0.7) 100%),
+                url('https://images.unsplash.com/photo-1550684376-efcbd6e3f031?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            margin-top: 0; /* 确保没有上边距 */
+        }
+        
+        .hero-content {
+            position: relative; /* 使眼睛可以相对于此定位 */
+            max-width: 900px;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        /* 当鼠标在眼睛区域时，标题不移动 */
+        .hero-content.no-title-move .hero-title {
+            transform: none !important;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero-title {
+            font-size: 72px;
+            font-weight: 300;
+            margin-bottom: 20px;
+            letter-spacing: 4px;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            line-height: 1.1;
+        }
+        
+        .hero-title span {
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+        
+        .hero-description {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+        }
+        
+        /* ========== 新增：小眼睛样式 ========== */
+        .eyes-container {
+            position: absolute;
+            top: -60px; /* 在标题上方 */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+            pointer-events: none;
+        }
+        
+        .eye {
+            width: 30px;
+            height: 30px;
+            background: white;
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .eyeball {
+            width: 15px;
+            height: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+        }
+        
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 18px 45px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 30px;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            margin-top: 20px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+            gap: 15px;
+        }
+        
+        .scroll-hint {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+        
+        /* 作品集展示区 - 确保有足够的上边距 */
+        .portfolio-section {
+            padding: 120px 40px 80px; /* 上边距加大，确保不会被遮住 */
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #ffffff;
+        }
+        
+        .section-title {
+            font-size: 42px;
+            text-align: center;
+            margin-bottom: 80px;
+            font-weight: 300;
+            letter-spacing: 3px;
+            position: relative;
+            color: #d3d3d3; /* 浅色背景时的深色文字 */
+            padding-top: 20px; /* 添加顶部内边距 */
+            transition: color 0.3s ease; /* 平滑过渡效果 */
+        }
+        
+        /* 深色背景时的浅色文字 */
+        .section-title.light-text {
+            color: white; /* 深色背景时的白色文字 */
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .portfolio-item {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+        
+        .portfolio-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0) 0%, rgba(118, 75, 162, 0) 100%);
+            transition: all 0.4s ease;
+            z-index: 1;
+        }
+        
+        .portfolio-item:hover::before {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+        
+        .portfolio-item:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        .portfolio-img-container {
+            position: relative;
+            overflow: hidden;
+            height: 350px;
+        }
+        
+        .portfolio-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        
+        .portfolio-item:hover .portfolio-img {
+            transform: scale(1.1);
+        }
+        
+        .portfolio-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+            display: flex;
+            align-items: flex-end;
+            padding: 30px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 2;
+        }
+        
+        .portfolio-item:hover .portfolio-overlay {
+            opacity: 1;
+        }
+        
+        .portfolio-info {
+            padding: 30px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .portfolio-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #222;
+        }
+        
+        .portfolio-category {
+            font-size: 13px;
+            color: #667eea;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 20px;
+        }
+        
+        /* 关于我区域 */
+        .about-section {
+            padding: 120px 40px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .about-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.05) 0%, transparent 70%);
+            transform: rotate(45deg);
+        }
+        
+        .about-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 80px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .about-img {
+            width: 380px;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            transform: perspective(1000px) rotateY(-10deg);
+            transition: transform 0.5s ease;
+        }
+        
+        .about-img:hover {
+            transform: perspective(1000px) rotateY(0deg);
+        }
+        
+        .about-content {
+            flex: 1;
+        }
+        
+        .about-title {
+            font-size: 42px;
+            margin-bottom: 30px;
+            font-weight: 300;
+            color: #222;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .about-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .about-text {
+            margin-bottom: 25px;
+            color: #555;
+            line-height: 1.9;
+            font-size: 17px;
+        }
+        
+        /* 联系区域 */
+        .contact-section {
+            padding: 120px 40px;
+            text-align: center;
+            background: #ffffff;
+        }
+        
+        .contact-title {
+            font-size: 42px;
+            margin-bottom: 20px;
+            font-weight: 300;
+            color: #222;
+            position: relative;
+            padding-bottom: 20px;
+        }
+        
+        .contact-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .contact-text {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 50px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+        }
+        
+        .contact-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-size: 17px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 30px;
+            letter-spacing: 1.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+        
+        .contact-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.6);
+            gap: 20px;
+        }
+        
+        /* 页脚 */
+        .footer {
+            padding: 70px 40px 40px;
+            text-align: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .footer-logo {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 15px;
+            font-weight: 500;
+            position: relative;
+            padding: 5px 0;
+        }
+        
+        .footer-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .footer-links a:hover::after {
+            width: 100%;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .social-link {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            margin-top: 40px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+        }
+        
+        /* ========== 响应式设计调整 ========== */
+        @media (max-width: 1200px) {
+            .hero-title {
+                font-size: 60px;
+            }
+            
+            .about-container {
+                gap: 50px;
+            }
+            
+            .about-img {
+                width: 320px;
+                height: 420px;
+            }
+            
+            /* 响应式导航栏高度调整 */
+            #portfolio, #about, #contact {
+                scroll-margin-top: 90px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 48px;
+            }
+            
+            .hero-subtitle {
+                font-size: 20px;
+            }
+            
+            .about-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 50px;
+            }
+            
+            .about-img {
+                width: 100%;
+                max-width: 400px;
+                transform: perspective(1000px) rotateY(0deg);
+            }
+            
+            .about-title::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            #portfolio, #about, #contact {
+                scroll-margin-top: 80px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+                height: 70px; /* 移动端导航栏高度 */
+            }
+            
+            .main-content {
+                margin-top: 70px; /* 与移动端导航栏高度匹配 */
+            }
+            
+            .nav-links {
+                gap: 20px;
+            }
+            
+            .hero-title {
+                font-size: 36px;
+            }
+            
+            .hero-subtitle {
+                font-size: 18px;
+            }
+            
+            .hero-description {
+                font-size: 16px;
+            }
+            
+            .section-title {
+                font-size: 32px;
+            }
+            
+            .portfolio-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 30px;
+            }
+            
+            .portfolio-section, .about-section, .contact-section {
+                padding: 100px 20px 60px; /* 调整移动端内边距 */
+            }
+            
+            .footer-links {
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+            
+            #portfolio, #about, #contact {
+                scroll-margin-top: 70px; /* 移动端偏移量 */
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 28px;
+            }
+            
+            .hero-subtitle {
+                font-size: 16px;
+            }
+            
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-button, .contact-btn {
+                padding: 15px 30px;
+                font-size: 15px;
+            }
+            
+            #portfolio, #about, #contact {
+                scroll-margin-top: 60px; /* 小屏幕偏移量 */
+            }
+        }
+
+        /* ========== 页面过渡动画 ========== */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .page-transition.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        /* 页面进入动画 */
+        .page-enter {
+            animation: pageEnter 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        @keyframes pageEnter {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* 为内容容器添加动画 */
+        .content-wrapper {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
+                        transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* 内容淡入效果 */
+        .content-wrapper.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* 加载器样式（可选） */
+        .loader-spinner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgb(232, 225, 225);
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            z-index: 10000;
+            display: none;
+        }
+        
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 页面过渡遮罩层 -->
+    <div class="page-transition" id="pageTransition"></div>
+    
+    <!-- 内容包装器 -->
+    <div class="content-wrapper">
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="logo">DESIGN STUDIO</div>
+        <div class="nav-links">
+            <a href="#portfolio">作品集</a>
+            <a href="#about">关于我</a>
+            <a href="#contact">联系</a>
+        </div>
+    </nav>
+    
+    <!-- 主内容区域 -->
+    <main class="main-content">
+        <!-- 英雄横幅区域 -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <!-- 新增：小眼睛容器 -->
+                <div class="eyes-container">
+                    <div class="eye">
+                        <div class="eyeball" id="eyeball-left"></div>
+                    </div>
+                    <div class="eye">
+                        <div class="eyeball" id="eyeball-right"></div>
+                    </div>
+                </div>
+                
+                <h1 class="hero-title">视觉传达<span>设计作品集</span></h1>
+                <p class="hero-subtitle">杨永琦 | 视觉设计师 & 品牌策略顾问</p>
+                <p class="hero-description">专注于品牌视觉、用户体验与数字产品的创新设计。通过战略性思维与美学表达，为企业创造有影响力的视觉解决方案。</p>
+                <button class="cta-button" onclick="document.querySelector('#portfolio').scrollIntoView({behavior: 'smooth', block: 'start'})">
+                    探索作品
+                    <span style="font-size: 20px;">→</span>
+                </button>
+            </div>
+            <div class="scroll-hint">
+                <span>向下滑动</span>
+                <div class="scroll-arrow">↓</div>
+            </div>
+        </section>
+        
+        <!-- 作品集展示区 -->
+        <!-- 添加一个隐藏的锚点元素，用于精确滚动定位 -->
+        <div id="portfolio" class="section-anchor"></div>
+        <section class="portfolio-section">
+            <!-- 为标题添加ID，用于JavaScript获取 -->
+            <h2 id="portfolio-title" class="section-title">精选设计作品</h2>
+            <div class="portfolio-grid">
+                <!-- 作品1 -->
+                <a href="project-details.html?project=1" class="portfolio-item">
+                    <div class="portfolio-img-container">
+                        <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1470&q=80" alt="品牌形象设计" class="portfolio-img">
+                        <div class="portfolio-overlay">
+                            <div class="portfolio-info">
+                                <h3 class="portfolio-title">自然有机品牌重塑</h3>
+                                <span class="portfolio-category">品牌形象设计</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- 作品2 -->
+                <a href="project-details.html?project=2" class="portfolio-item">
+                    <div class="portfolio-img-container">
+                        <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?ixlib=rb-1.2.1&auto=format&fit=crop&w=1470&q=80" alt="包装设计" class="portfolio-img">
+                        <div class="portfolio-overlay">
+                            <div class="portfolio-info">
+                                <h3 class="portfolio-title">高端茶饮系列包装</h3>
+                                <span class="portfolio-category">包装设计</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- 作品3 -->
+                <a href="project-details.html?project=3" class="portfolio-item">
+                    <div class="portfolio-img-container">
+                        <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1470&q=80" alt="UI/UX设计" class="portfolio-img">
+                        <div class="portfolio-overlay">
+                            <div class="portfolio-info">
+                                <h3 class="portfolio-title">健身应用界面设计</h3>
+                                <span class="portfolio-category">UI/UX设计</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- 作品4 -->
+                <a href="project-details.html?project=4" class="portfolio-item">
+                    <div class="portfolio-img-container">
+                        <img src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1470&q=80" alt="海报设计" class="portfolio-img">
+                        <div class="portfolio-overlay">
+                            <div class="portfolio-info">
+                                <h3 class="portfolio-title">音乐节视觉海报系列</h3>
+                                <span class="portfolio-category">海报设计</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+        
+        <!-- 关于我区域 -->
+        <div id="about" class="section-anchor"></div>
+        <section class="about-section">
+            <div class="about-container">
+                <img src="images\about\portrait.jpg" alt="设计师肖像" class="about-img">
+                <div class="about-content">
+                    <h2 class="about-title">关于设计师</h2>
+                    <p class="about-text">拥有8年视觉传达与品牌设计经验，曾与全球知名品牌合作，专注于创建有深度、有情感的视觉解决方案。相信设计不仅是美学表达，更是商业策略与用户体验的完美结合。</p>
+                    <p class="about-text">擅长通过系统的设计思维，将复杂的商业需求转化为简洁有力的视觉语言。在品牌策略、用户体验和视觉传达之间建立有机连接，为产品赋予独特的品牌个性与市场竞争力。</p>
+                    <p class="about-text">作品曾荣获Red Dot、iF Design Award等多个国际设计奖项，并在多个国际设计展览中展出。持续探索设计与技术、商业与艺术的交汇点，致力于创造有意义的设计体验。</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 联系区域 -->
+        <div id="contact" class="section-anchor"></div>
+        <section class="contact-section">
+            <h2 class="contact-title">开启设计对话</h2>
+            <p class="contact-text">如果您正在寻找创新的设计解决方案，或希望探讨潜在的合作机会，欢迎随时与我联系。我期待与您共同创造有意义的设计作品。</p>
+            <button class="contact-btn" onclick="window.location.href='mailto:designer@portfolio.com'">
+                发送合作邀请
+                <span style="font-size: 20px;">↗</span>
+            </button>
+        </section>
+    </main>
+    
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">DESIGN STUDIO</div>
+            <div class="footer-links">
+                <a href="#portfolio">作品集</a>
+                <a href="#about">关于</a>
+                <a href="#contact">联系</a>
+                <a href="#">博客</a>
+                <a href="#">服务</a>
+            </div>
+            <div class="social-links">
+                <a href="#" class="social-link">📷</a>
+                <a href="#" class="social-link">🐦</a>
+                <a href="#" class="social-link">📘</a>
+                <a href="#" class="social-link">💼</a>
+            </div>
+            <div class="copyright">
+                <p>© 2025 杨永琦视觉设计工作室 | 本网站展示所有设计作品均为原创或授权使用</p>
+                <p style="margin-top: 10px; font-size: 12px;">Made with❤️ for great design</p>
+            </div>
+        </div>
+    </footer>
+    </div> <!-- 结束.content-wrapper -->
+    <script>
+        // ========== 新增：小眼睛跟随鼠标功能 ==========
+        function updateEyes(event) {
+            const leftEye = document.getElementById('eyeball-left');
+            const rightEye = document.getElementById('eyeball-right');
+            const eyesContainer = document.querySelector('.eyes-container');
+            const heroContent = document.querySelector('.hero-content');
+            
+            if (!leftEye || !rightEye || !eyesContainer) return;
+            
+            // 获取眼睛容器的位置和大小
+            const containerRect = eyesContainer.getBoundingClientRect();
+            const containerCenterX = containerRect.left + containerRect.width / 2;
+            const containerCenterY = containerRect.top + containerRect.height / 2;
+            
+            // 计算每个眼睛的中心位置
+            const leftEyeRect = leftEye.parentElement.getBoundingClientRect();
+            const rightEyeRect = rightEye.parentElement.getBoundingClientRect();
+            
+            const leftEyeCenterX = leftEyeRect.left + leftEyeRect.width / 2;
+            const leftEyeCenterY = leftEyeRect.top + leftEyeRect.height / 2;
+            
+            const rightEyeCenterX = rightEyeRect.left + rightEyeRect.width / 2;
+            const rightEyeCenterY = rightEyeRect.top + rightEyeRect.height / 2;
+            
+            // 计算鼠标相对于每个眼睛中心的偏移
+            const leftDeltaX = event.clientX - leftEyeCenterX;
+            const leftDeltaY = event.clientY - leftEyeCenterY;
+            
+            const rightDeltaX = event.clientX - rightEyeCenterX;
+            const rightDeltaY = event.clientY - rightEyeCenterY;
+            
+            // 计算角度和距离
+            const leftDistance = Math.min(
+                Math.sqrt(leftDeltaX * leftDeltaX + leftDeltaY * leftDeltaY),
+                7 // 限制眼珠移动范围
+            );
+            const leftAngle = Math.atan2(leftDeltaY, leftDeltaX);
+            
+            const rightDistance = Math.min(
+                Math.sqrt(rightDeltaX * rightDeltaX + rightDeltaY * rightDeltaY),
+                7 // 限制眼珠移动范围
+            );
+            const rightAngle = Math.atan2(rightDeltaY, rightDeltaX);
+            
+            // 计算眼珠新位置
+            const leftX = Math.cos(leftAngle) * leftDistance;
+            const leftY = Math.sin(leftAngle) * leftDistance;
+            
+            const rightX = Math.cos(rightAngle) * rightDistance;
+            const rightY = Math.sin(rightAngle) * rightDistance;
+            
+            // 应用眼珠位置
+            leftEye.style.transform = `translate(${leftX}px, ${leftY}px)`;
+            rightEye.style.transform = `translate(${rightX}px, ${rightY}px)`;
+            
+            // 当鼠标靠近眼睛时，暂停标题的鼠标移动效果
+            const mouseInEyesArea = 
+                event.clientX >= containerRect.left - 50 && 
+                event.clientX <= containerRect.right + 50 &&
+                event.clientY >= containerRect.top - 50 && 
+                event.clientY <= containerRect.bottom + 50;
+            
+            if (mouseInEyesArea && heroContent) {
+                heroContent.classList.add('no-title-move');
+            } else if (heroContent) {
+                heroContent.classList.remove('no-title-move');
+            }
+        }
+        
+        // ========== 修复：改进的平滑滚动功能 ==========
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    // 获取当前导航栏高度
+                    const navbar = document.querySelector('.navbar');
+                    const navbarHeight = navbar.offsetHeight;
+                    
+                    // 计算目标位置，添加额外偏移
+                    const targetPosition = targetElement.offsetTop - navbarHeight - 20;
+                    
+                    // 使用更现代的滚动方式
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                    
+                    // 或者使用scrollIntoView（备选方案）
+                    // targetElement.scrollIntoView({
+                    //     behavior: 'smooth',
+                    //     block: 'start'
+                    // });
+                }
+            });
+        });
+        
+        // 导航栏滚动效果 + 标题颜色动态切换
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            const heroSection = document.querySelector('.hero-section');
+            const portfolioTitle = document.getElementById('portfolio-title');
+            
+            // 导航栏滚动效果
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            
+            // 标题颜色切换逻辑
+            if (heroSection && portfolioTitle) {
+                const heroHeight = heroSection.offsetHeight; // 英雄区高度
+                const titleTop = portfolioTitle.getBoundingClientRect().top; // 标题距离视口顶部距离
+                const navbarHeight = navbar.offsetHeight; // 导航栏高度
+                
+                // 当标题顶部进入英雄区（视口顶部到英雄区底部之间）
+                if (titleTop < heroHeight - navbarHeight) {
+                    portfolioTitle.classList.add('light-text');
+                } else {
+                    portfolioTitle.classList.remove('light-text');
+                }
+            }
+            
+            // 视差滚动效果
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.hero-section');
+            parallaxElements.forEach(element => {
+                element.style.transform = `translateY(${scrolled * 0.5}px)`;
+            });
+        });
+        
+        // 页面加载时初始化眼睛位置
+        window.addEventListener('load', function() {
+            // 初始化眼睛位置到中心
+            const leftEye = document.getElementById('eyeball-left');
+            const rightEye = document.getElementById('eyeball-right');
+            
+            if (leftEye && rightEye) {
+                leftEye.style.transform = 'translate(0, 0)';
+                rightEye.style.transform = 'translate(0, 0)';
+            }
+            
+            document.body.classList.add('loaded');
+            
+            // 延迟显示内容，增强加载体验
+            setTimeout(() => {
+                const heroContent = document.querySelector('.hero-content');
+                if (heroContent) {
+                    heroContent.style.opacity = '1';
+                    heroContent.style.transform = 'translateY(0)';
+                }
+            }, 300);
+        });
+        
+        // 在原有的鼠标移动事件监听器中集成眼睛功能
+        document.addEventListener('mousemove', function(e) {
+            const x = (e.clientX / window.innerWidth - 0.5) * 20;
+            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+            
+            const heroTitle = document.querySelector('.hero-title');
+            if (heroTitle) {
+                heroTitle.style.transform = `translate(${x}px, ${y}px)`;
+            }
+            
+            // 新增：更新眼睛位置
+            updateEyes(e);
+        });
+        
+        // ========== 修复：页面加载时处理锚点滚动 + 标题颜色初始化 ==========
+        window.addEventListener('DOMContentLoaded', function() {
+            // 标题颜色初始化
+            const heroSection = document.querySelector('.hero-section');
+            const portfolioTitle = document.getElementById('portfolio-title');
+            const navbar = document.querySelector('.navbar');
+            
+            if (heroSection && portfolioTitle && navbar) {
+                const heroHeight = heroSection.offsetHeight;
+                const titleTop = portfolioTitle.getBoundingClientRect().top;
+                const navbarHeight = navbar.offsetHeight;
+                
+                if (titleTop < heroHeight - navbarHeight) {
+                    portfolioTitle.classList.add('light-text');
+                }
+            }
+            
+            // 锚点滚动处理
+            if (window.location.hash) {
+                setTimeout(() => {
+                    const targetElement = document.querySelector(window.location.hash);
+                    if (targetElement) {
+                        const navbar = document.querySelector('.navbar');
+                        const navbarHeight = navbar.offsetHeight;
+                        const targetPosition = targetElement.offsetTop - navbarHeight - 20;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                }, 100);
+            }
+        });
+
+        // ========== 页面过渡功能 ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            const pageTransition = document.getElementById('pageTransition');
+            const contentWrapper = document.querySelector('.content-wrapper');
+            
+            // 页面加载完成后淡入内容
+            setTimeout(() => {
+                contentWrapper.classList.add('loaded');
+            }, 100);
+            
+            // 为所有项目链接添加平滑过渡
+            document.querySelectorAll('.portfolio-item').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetUrl = this.getAttribute('href');
+                    
+                    // 显示过渡效果
+                    if (pageTransition) {
+                        pageTransition.classList.add('active');
+                    }
+                    
+                    // 隐藏当前内容
+                    contentWrapper.style.opacity = '0';
+                    contentWrapper.style.transform = 'translateY(20px)';
+                    
+                    // 可选：显示加载器
+                    const loader = document.createElement('div');
+                    loader.className = 'loader-spinner';
+                    loader.style.display = 'block';
+                    document.body.appendChild(loader);
+                    
+                    // 延迟跳转，让过渡动画完成
+                    setTimeout(() => {
+                        window.location.href = targetUrl;
+                    }, 500);
+                });
+            });
+            
+            // 为导航链接添加平滑过渡（如果有外部链接）
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && href.startsWith('http')) {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const targetUrl = this.getAttribute('href');
+                        
+                        // 显示过渡效果
+                        if (pageTransition) {
+                            pageTransition.classList.add('active');
+                        }
+                        
+                        // 隐藏当前内容
+                        contentWrapper.style.opacity = '0';
+                        contentWrapper.style.transform = 'translateY(20px)';
+                        
+                        setTimeout(() => {
+                            window.location.href = targetUrl;
+                        }, 500);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

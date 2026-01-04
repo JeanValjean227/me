@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作品详情 | 设计作品集</title>
+    <style>
+        /* 复用原有的样式，可以放在单独的CSS文件中 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            color: #222;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        
+        .navbar {
+            position: fixed; /* 固定定位，固定在屏幕顶部 */
+            top: 0;
+            width: 100%;
+            background-color: white;
+            padding: 10px 40px; /* 从20px减少到15px */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08); /* 添加阴影让导航栏更清晰 */
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #222;
+        }
+        
+        .back-btn {
+            padding: 12px 25px;
+            background-color: #222;
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background-color: #444;
+            transform: translateY(-2px);
+        }
+        
+        .detail-container {
+            max-width: 1200px;
+            margin: 80px auto 50px; /* 增加上边距，避免内容被固定导航栏遮挡 */
+            padding: 0 40px;
+        }
+        
+        .detail-header {
+            margin-bottom: 50px;
+        }
+        
+        .detail-title {
+            font-size: 42px; /* 增大标题字体 */
+            margin-bottom: 15px;
+            color: #222;
+            font-weight: 600;
+        }
+        
+        .detail-category {
+            font-size: 18px;
+            color: #667eea; /* 使用主色调 */
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 20px;
+        }
+        
+        .detail-image {
+            width: 100%;
+            max-height: 600px;
+            object-fit: cover;
+            margin-bottom: 50px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .detail-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 60px;
+        }
+        
+        .detail-description h3 {
+            font-size: 28px;
+            margin-bottom: 25px;
+            color: #222;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .detail-description p {
+            margin-bottom: 25px;
+            color: #555;
+            line-height: 1.8;
+            font-size: 17px;
+        }
+        
+        .detail-info {
+            background-color: white;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            border-top: 4px solid #667eea;
+        }
+        
+        .info-item {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .info-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #222;
+            font-size: 15px;
+        }
+        
+        .info-value {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 50px;
+        }
+        
+        .gallery-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .gallery-img:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* 图集标题样式 */
+        .gallery-title {
+            font-size: 28px;
+            margin: 60px 0 25px;
+            color: #dfdfdf;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        @media (max-width: 992px) {
+            .detail-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .detail-container {
+                margin: 100px auto 40px; /* 调整上边距，适应固定导航栏 */
+                padding: 0 30px;
+            }
+            
+            .detail-title {
+                font-size: 36px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 12px 25px; /* 从15px减少到12px */
+            }
+            
+            .detail-container {
+                margin: 90px auto 30px; /* 调整上边距，适应固定导航栏 */
+                padding: 0 20px;
+            }
+            
+            .detail-title {
+                font-size: 32px;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .gallery-img {
+                height: 180px;
+            }
+            
+            .detail-info {
+                padding: 25px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 10px 20px; /* 从12px减少到10px */
+            }
+            
+            .logo {
+                font-size: 20px;
+            }
+            
+            .back-btn {
+                padding: 10px 20px;
+                font-size: 13px;
+            }
+            
+            .detail-container {
+                margin: 80px auto 20px; /* 调整上边距，适应固定导航栏 */
+                padding: 0 15px;
+            }
+            
+            .detail-title {
+                font-size: 28px;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .gallery-img {
+                height: 200px;
+            }
+            
+            .detail-info {
+                padding: 20px;
+            }
+        }
+
+        /* ========== 页面过渡动画 ========== */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .page-transition.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        /* 页面进入动画 */
+        .page-enter {
+            animation: pageEnter 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        @keyframes pageEnter {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* 为内容容器添加动画 */
+        .content-wrapper {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
+                        transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .content-wrapper.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* 加载器样式 */
+        .loader-spinner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(102, 126, 234, 0.1);
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            z-index: 10000;
+            display: none;
+        }
+        
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 页面过渡遮罩层 -->
+    <div class="page-transition" id="pageTransition"></div>
+    
+    <!-- 内容包装器 -->
+    <div class="content-wrapper">
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="logo">作品详情</div>
+        <a href="作品.html" class="back-btn">返回作品集</a>
+    </nav>
+    
+    <!-- 作品详情内容 -->
+    <div class="detail-container">
+        <div class="detail-header">
+            <h1 class="detail-title" id="project-title">项目标题</h1>
+            <p class="detail-category" id="project-category">设计类别</p>
+        </div>
+        
+        <img src="" alt="作品主图" class="detail-image" id="project-main-image">
+        
+        <div class="detail-content">
+            <div class="detail-description">
+                <h3>项目概述</h3>
+                <p id="project-description">这里是项目的详细描述...</p>
+                
+                <h3>设计理念</h3>
+                <p id="project-concept">这里是设计理念的详细说明...</p>
+                
+                <h3>技术实现</h3>
+                <p id="project-tech">这里描述使用的技术和工具...</p>
+            </div>
+            
+            <div class="detail-info">
+                <div class="info-item">
+                    <div class="info-label">客户</div>
+                    <div class="info-value" id="project-client">客户名称</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">项目时间</div>
+                    <div class="info-value" id="project-date">2024年1月-3月</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">设计工具</div>
+                    <div class="info-value" id="project-tools">Figma, Illustrator, Photoshop</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">项目类型</div>
+                    <div class="info-value" id="project-type">商业项目</div>
+                </div>
+            </div>
+        </div>
+        
+        <h3 class="gallery-title">项目图集</h3>
+        <div class="gallery-grid" id="project-gallery">
+            <!-- 图片将通过JavaScript动态添加 -->
+        </div>
+    </div>
+    </div> <!-- 结束.content-wrapper -->
+    <script>
+        // 获取URL参数
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+        
+        // 根据项目ID加载不同内容
+        const projectId = getQueryParam('project') || '1';
+        
+        // 项目数据
+        const projects = {
+            '1': {
+                title: '自然有机品牌重塑',
+                category: '品牌形象设计',
+                image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1470&q=80',
+                description: '为一家专注于自然有机产品的公司进行的品牌形象全面重塑。项目包括品牌定位、视觉识别系统、包装设计及品牌应用规范。',
+                concept: '以"回归自然本质"为核心设计理念，采用柔和的大地色系，结合有机形态的图形元素，传达品牌的纯净、自然与可持续性。',
+                tech: '使用Figma进行品牌系统设计，Illustrator创建矢量图形，Photoshop进行效果渲染和材质表现。',
+                client: 'NaturePure有机生活品牌',
+                date: '2023年10月-2024年2月',
+                tools: 'Figma, Illustrator, Photoshop, After Effects',
+                type: '品牌设计项目',
+                gallery: [
+                    'https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1629198720833-2a1f7b0b1a1b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1634942537034-2531766767d1?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+                ]
+            },
+            '2': {
+                title: '高端茶饮系列包装',
+                category: '包装设计',
+                image: 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?ixlib=rb-1.2.1&auto=format&fit=crop&w=1470&q=80',
+                description: '为一款高端茶饮品牌设计系列包装，包含6种不同口味的产品包装、礼盒设计及品牌周边。',
+                concept: '以东方美学为灵感，采用简约现代的设计语言，结合传统茶文化的元素，打造具有收藏价值的包装系列。',
+                tech: 'C4D进行包装建模渲染，Illustrator设计矢量图形，InDesign进行排版和印刷规范制定。',
+                client: '禅意茶道高端茶饮',
+                date: '2024年3月-5月',
+                tools: 'Cinema 4D, Illustrator, InDesign',
+                type: '包装设计项目',
+                gallery: [
+                    'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1514228742587-6b1558fcf93a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1514228742587-6b1558fcf93a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+                ]
+            },
+            '3': {
+                title: '健身应用界面设计',
+                category: 'UI/UX设计',
+                image: 'https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1470&q=80',
+                description: '为一款健身应用设计的用户界面和用户体验，包含训练计划、进度跟踪和社交功能。',
+                concept: '以"活力与动力"为核心设计理念，采用鲜艳的运动色调，结合动态的界面元素，创造激励人心的用户体验。',
+                tech: '使用Figma进行原型设计，React Native实现跨平台应用，Firebase进行后端支持。',
+                client: 'FitLife健身科技',
+                date: '2024年1月-4月',
+                tools: 'Figma, React Native, Firebase',
+                type: '移动应用设计',
+                gallery: [
+                    'https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+                ]
+            },
+            '4': {
+                title: '音乐节视觉海报系列',
+                category: '海报设计',
+                image: 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1470&q=80',
+                description: '为一款大型音乐节设计的系列视觉海报，包含主视觉海报、节目单和宣传物料。',
+                concept: '以"声音的视觉化"为核心设计理念，采用抽象的音波图形和鲜艳的色彩，传达音乐的韵律感和能量。',
+                tech: '使用Illustrator进行矢量图形设计，Photoshop进行效果处理和材质表现，After Effects制作动态版本。',
+                client: '声浪音乐节',
+                date: '2024年5月-7月',
+                tools: 'Illustrator, Photoshop, After Effects',
+                type: '活动视觉设计',
+                gallery: [
+                    'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1511735111819-9a3f7709049c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+                ]
+            }
+        };
+        
+        // 加载项目数据
+        const project = projects[projectId] || projects['1'];
+        
+        // 更新页面内容
+        document.getElementById('project-title').textContent = project.title;
+        document.getElementById('project-category').textContent = project.category;
+        document.getElementById('project-main-image').src = project.image;
+        document.getElementById('project-description').textContent = project.description;
+        document.getElementById('project-concept').textContent = project.concept;
+        document.getElementById('project-tech').textContent = project.tech;
+        document.getElementById('project-client').textContent = project.client;
+        document.getElementById('project-date').textContent = project.date;
+        document.getElementById('project-tools').textContent = project.tools;
+        document.getElementById('project-type').textContent = project.type;
+        
+        // 更新页面标题
+        document.title = `${project.title} | 作品详情`;
+        
+        // 生成画廊图片
+        const galleryGrid = document.getElementById('project-gallery');
+        project.gallery.forEach(imgUrl => {
+            const img = document.createElement('img');
+            img.src = imgUrl;
+            img.alt = project.title;
+            img.className = 'gallery-img';
+            galleryGrid.appendChild(img);
+        });
+        
+        // 返回按钮功能
+        document.querySelector('.back-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.history.back();
+        });
+
+        // ========== 页面过渡功能 ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            const pageTransition = document.getElementById('pageTransition');
+            const contentWrapper = document.querySelector('.content-wrapper');
+            
+            // 页面加载时淡入内容
+            setTimeout(() => {
+                // 隐藏过渡层
+                if (pageTransition) {
+                    pageTransition.classList.remove('active');
+                }
+                
+                // 淡入内容
+                contentWrapper.classList.add('loaded');
+                contentWrapper.classList.add('page-enter');
+            }, 100);
+            
+            // 返回按钮的平滑过渡
+            const backBtn = document.querySelector('.back-btn');
+            if (backBtn) {
+                backBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // 显示过渡效果
+                    if (pageTransition) {
+                        pageTransition.classList.add('active');
+                    }
+                    
+                    // 隐藏当前内容
+                    contentWrapper.style.opacity = '0';
+                    contentWrapper.style.transform = 'translateY(20px)';
+                    
+                    // 可选：显示加载器
+                    const loader = document.createElement('div');
+                    loader.className = 'loader-spinner';
+                    loader.style.display = 'block';
+                    document.body.appendChild(loader);
+                    
+                    // 延迟返回
+                    setTimeout(() => {
+                        window.history.back();
+                    }, 500);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
